@@ -21,7 +21,7 @@ export default function Header() {
       <div className="bg-[#0003] w-full z-[9999] fixed flex justify-between items-center px-8 sm:px-16 xl:px-32 py-4">
         <div className="text-white">
           <h1 className="font-medium text-xl">
-            <Link href="/">STAKING</Link>
+            <Link href="/">Gen2 STAKING</Link>
           </h1>
         </div>
         <div className="flex items-center gap-[20px] text-white">
