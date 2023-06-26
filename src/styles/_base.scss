@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url("../../public/img/poly-staking-background.png");
+  background-repeat: no-repeat;
+  background-position: 100% 23%;
+  background-size: cover;
+  font-family: "Inter";
+  // background-color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@font-face {
+  font-family: "FreakyStory";
+  src: local("FreakyStory"), url("/font/FreakyStory.otf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "light";
+  src: local("light"), url("/font/LucidaConsoleRegular.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Pumpshot";
+  src: url("/font/Pumpshot.woff2") format("woff2"),
+    url("/font/Pumpshot.otf") format("opentype");
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+
+.regularfont {
+  font-family: "light" !important;
+}
+
+.sitefont {
+  font-family: "FreakyStory" !important;
+}
+
+.pumpshot-font {
+  font-family: "pumpshot" !important;
+}
+
+#__next {
+  height: 89%;
+}
+
+.wolf-image {
+  background-image: url("../../public/img/poly-stake-image.png");
+  background-repeat: no-repeat;
+  background-position: 90% 100%;
+  background-size: 620px;
+
+  @media screen and (max-width: 668px) {
+    background-size: calc(100% / 1);
+  }
+}

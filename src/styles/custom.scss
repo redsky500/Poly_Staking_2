@@ -1,0 +1,95 @@
+.logo-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 0.2em;
+}
+
+.p-center {
+  display: table-cell;
+  vertical-align: middle;
+  height: 20px;
+}
+
+.font-inter {
+  font-family: "Inter";
+}
+
+.svg-white {
+  fill: white;
+}
+
+.banner-gradient {
+  background: linear-gradient(
+    270deg,
+    rgba(4, 224, 159, 0.5) 0%,
+    rgba(4, 224, 159, 0) 100%
+  );
+}
+
+.presel-gradient {
+  border-width: 1px;
+  border-style: solid;
+  color: #f7931b;
+  background: linear-gradient(180deg, #22222287 0%, #2222225c 100%);
+  border-radius: 20px;
+  backdrop-filter: blur(7px);
+  box-shadow: var(--box-shadow);
+}
+
+.mint-form {
+  background-image: url("/img/Background_image.jpeg");
+}
+
+.mint-image {
+  margin-top: 30px;
+  margin-bottom: 40px;
+  max-width: 266px;
+  margin-right: auto;
+}
+
+.mint-content {
+  width: calc(100% - 266px - 24px);
+}
+
+.mint-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 24px;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.dashboard-content-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(calc(-80% - -5rem), -50%);
+  color: white;
+  max-width: 500px;
+  @media screen and (max-width: 1024px) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .meta-wolf-wrapper {
+    font-family: "pumpshot" !important;
+    font-size: 100px;
+    line-height: 88px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    @media screen and (max-width: 400px) {
+      font-size: 70px;
+      line-height: 60px;
+    }
+  }
+  .wolf-para {
+    line-height: 23px;
+    font-size: 18px;
+
+    @media screen and (max-width: 400px) {
+      font-size: 14px;
+    }
+  }
+}
