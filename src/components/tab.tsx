@@ -43,7 +43,7 @@ const Tab = ({
                 : `flex justify-center py-4 text-white`
             }
           >
-            Stake View
+            Unstaked
           </a>
         </li>
         <li className="cursor-pointer">
@@ -57,7 +57,7 @@ const Tab = ({
                 : `flex justify-center py-4 text-white`
             }
           >
-            Unstake View
+            Staked
           </a>
         </li>
       </ul>
