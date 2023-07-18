@@ -28,23 +28,29 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
   const [isClaimAllProcessing, setIsClaimAllProcessing] = useState(false);
   const [paginationNFT, setMintCards] = useState([]);
   const [reward, setReward] = useState<any>(null);
+  const [bgStyle, setBgStyle] = useState("");
 
   useEffect(() => {
+    let bgStyle = setBgStyle("wolf-image");
     if (!account) {
       setIsLoggedIn(false);
+      setUserNFTs([]);
       return;
     } else {
+      bgStyle = setBgStyle("");
       initialSyncFunction();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, setUserNFTs]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       getRewardPrize();
     }, 30 * 60 * 1000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const initialSyncFunction = async () => {
@@ -52,25 +58,32 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
     const getNFTs = await filteredNFTs(account!);
     const matchedNFTs = getNFTs.ownedNfts.filter(
       (item: any) =>
-        item.contract?.address?.toLowerCase() == filterContract.toLowerCase()
+        item?.contract?.address?.toLowerCase() !== filterContract.toLowerCase()
     );
-    const convertedAllNFTs: any = [];
-    matchedNFTs.map((item: any, index: number) => {
-      const image = item?.rawMetadata?.image?.includes("ipfs://")
-        ? item?.rawMetadata?.image?.replace("ipfs://", "https://ipfs.io/ipfs/")
-        : item?.rawMetadata?.image;
-      LOTTERYContract.readStake(item.tokenId).then((isStaked: boolean) => {
-        convertedAllNFTs.push({
-          tokenId: item.tokenId,
-          image,
-          isStaked,
+    if (matchedNFTs.length) {
+      const convertedAllNFTs: any = [];
+      matchedNFTs.map((item: any, index: number) => {
+        const image = item?.rawMetadata?.image?.includes("ipfs://")
+          ? item?.rawMetadata?.image?.replace(
+              "ipfs://",
+              "https://ipfs.io/ipfs/"
+            )
+          : item?.rawMetadata?.image;
+        LOTTERYContract.readStake(item.tokenId).then((isStaked: boolean) => {
+          convertedAllNFTs.push({
+            tokenId: item.tokenId,
+            image,
+            isStaked,
+          });
+          if (matchedNFTs.length - 1 == index) {
+            setUserNFTs(convertedAllNFTs);
+            handleTabs("tab-1", convertedAllNFTs);
+          }
         });
-        if (matchedNFTs.length - 1 == index) {
-          setUserNFTs(convertedAllNFTs);
-          handleTabs("tab-1", convertedAllNFTs);
-        }
       });
-    });
+    } else {
+      setPageLoad(false);
+    }
   };
 
   const filteredNFTs = useCallback(async (account: string) => {
@@ -233,7 +246,9 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
       {pageLoad ? (
         loader
       ) : (
-        <div className="w-full h-full overflow-auto px-4 sm:px-16 py-8 font-inter text-center text-[20px]">
+        <div
+          className={`${bgStyle} w-full h-full overflow-auto px-4 sm:px-16 py-8 font-inter text-center text-[20px]`}
+        >
           <div className="max-w-[1440px] xl:flex flex-col sm:p-10 p-0 m-auto mt-0 min-h-full">
             <div className="flex flex-wrap justify-center items-center xl:w-full gap-[20px] px-[16px]">
               {!isLoggedIn && (
