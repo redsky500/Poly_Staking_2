@@ -58,7 +58,7 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
     const getNFTs = await filteredNFTs(account!);
     const matchedNFTs = getNFTs.ownedNfts.filter(
       (item: any) =>
-        item?.contract?.address?.toLowerCase() !== filterContract.toLowerCase()
+        item?.contract?.address?.toLowerCase() == filterContract.toLowerCase()
     );
     if (matchedNFTs.length) {
       const convertedAllNFTs: any = [];
