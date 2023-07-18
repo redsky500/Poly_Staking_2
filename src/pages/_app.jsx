@@ -23,15 +23,13 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import "../styles/style.scss";
 import "@rainbow-me/rainbowkit/styles.css";
-import classnames from "classnames";
-import { useEffect } from "react";
+import React from "react";
 
 const appProvider =
   typeof window !== "undefined" && window?.ethereum
     ? new ethers.providers.Web3Provider(window.ethereum)
     : null;
 
-let className = classnames("wolf-image");
 function StakingApp({ Component, pageProps }) {
   const { chains, provider } = configureChains(
     [
@@ -66,20 +64,12 @@ function StakingApp({ Component, pageProps }) {
     LOTTERYABI,
     Signer
   );
-  const { address: account } = useAccount();
-
-  useEffect(() => {
-    if (account) {
-      className = classnames("wolf-gone");
-    }
-  }, [account]);
 
   return (
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ ease: "easeInOut", duration: 0.9, delay: 0.2 }}
-      className={className}
     >
       <Web3ReactProvider>
         <WagmiConfig client={wagmiClient}>

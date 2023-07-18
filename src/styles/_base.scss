@@ -69,6 +69,7 @@ body {
   background-repeat: no-repeat;
   background-position: 90% 100%;
   background-size: 620px;
+  position: absolute;
 
   @media screen and (max-width: 668px) {
     background-size: calc(100% / 1);

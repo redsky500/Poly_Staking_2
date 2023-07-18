@@ -11,7 +11,7 @@ export default function Header() {
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
-    if (account?.toLowerCase() == ownerAddress?.toLowerCase()) {
+    if (account && account.toLowerCase() == ownerAddress?.toLowerCase()) {
       setIsOwner(true);
     }
   }, [account]);
