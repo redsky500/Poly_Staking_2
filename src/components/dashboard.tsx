@@ -69,17 +69,21 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
               "https://ipfs.io/ipfs/"
             )
           : item?.rawMetadata?.image;
-        LOTTERYContract.readStake(item.tokenId).then((isStaked: boolean) => {
-          convertedAllNFTs.push({
-            tokenId: item.tokenId,
-            image,
-            isStaked,
+        LOTTERYContract.readStake(item.tokenId)
+          .then((isStaked: boolean) => {
+            convertedAllNFTs.push({
+              tokenId: item.tokenId,
+              image,
+              isStaked,
+            });
+            if (matchedNFTs.length - 1 == index) {
+              setUserNFTs(convertedAllNFTs);
+              handleTabs("tab-1", convertedAllNFTs);
+            }
+          })
+          .finally(() => {
+            setPageLoad(false);
           });
-          if (matchedNFTs.length - 1 == index) {
-            setUserNFTs(convertedAllNFTs);
-            handleTabs("tab-1", convertedAllNFTs);
-          }
-        });
       });
     } else {
       setPageLoad(false);

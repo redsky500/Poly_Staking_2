@@ -1,11 +1,12 @@
-const switchNetworkRequest = () =>
-  (window as any).ethereum.request({
+const switchNetworkRequest = () => {
+  return (window as any).ethereum.request({
     method: "wallet_switchEthereumChain",
     params: [{ chainId: "0x1" }],
   });
+};
 
-const addNetworkRequest = () =>
-  (window as any).ethereum.request({
+const addNetworkRequest = () => {
+  return (window as any).ethereum.request({
     method: "wallet_addEthereumChain",
     params: [
       {
@@ -21,6 +22,7 @@ const addNetworkRequest = () =>
       },
     ],
   });
+};
 
 export const switchNetwork = async () => {
   if (window as any) {
