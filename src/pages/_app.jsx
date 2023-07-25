@@ -3,21 +3,13 @@ import { Web3ReactProvider } from "@web3-react/core";
 import { ethers } from "ethers";
 import { motion } from "framer-motion";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig, useAccount } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { LOTTERY_CONTRACTADDRESS } from "../config";
 import LOTTERYABI from "../../public/abi/LOTTERYABI.json";
 import {
-  mainnet,
   polygon,
-  optimism,
-  arbitrum,
-  arbitrumGoerli,
-  baseGoerli,
-  goerli,
-  metisGoerli,
-  optimismGoerli,
 } from "wagmi/chains";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -33,15 +25,7 @@ const appProvider =
 function StakingApp({ Component, pageProps }) {
   const { chains, provider } = configureChains(
     [
-      mainnet,
       polygon,
-      optimism,
-      arbitrum,
-      arbitrumGoerli,
-      baseGoerli,
-      goerli,
-      metisGoerli,
-      optimismGoerli,
     ],
     [
       alchemyProvider({ apiKey: "A2lxdLrej8vanUUK4wAY3pniny2FEL5L" }),
