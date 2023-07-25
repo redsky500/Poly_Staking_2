@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import MintCards from "./MintCards";
 import { errorToast, successToast } from "../services/toast-service";
 import Loader from "react-spinners/HashLoader";
@@ -30,19 +30,33 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
   const [reward, setReward] = useState<any>(null);
   const [bgStyle, setBgStyle] = useState("");
 
+  const { chain } = useNetwork();
+  const [currentNetwork, setCurrentNetwork] = useState("");
+
   useEffect(() => {
-    let bgStyle = setBgStyle("wolf-image");
+    const networkName = chain?.name;
+    setCurrentNetwork(networkName!);
+    setBgStyle("wolf-image");
+
     if (!account) {
       setIsLoggedIn(false);
       setUserNFTs([]);
       return;
-    } else {
-      bgStyle = setBgStyle("");
+    }
+
+    if (networkName !== "Polygon") {
+      setIsLoggedIn(false);
+      errorToast("Please connect to Polygon net");
+      return;
+    }
+
+    if (networkName == "Polygon" && account) {
+      setBgStyle("");
       initialSyncFunction();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, setUserNFTs]);
+  }, [account, setUserNFTs, chain?.name]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -80,6 +94,9 @@ const Dashboard = ({ alchemy, LOTTERYContract }: any) => {
               setUserNFTs(convertedAllNFTs);
               handleTabs("tab-1", convertedAllNFTs);
             }
+          })
+          .catch(() => {
+            errorToast("Something went wrong! Can you please reload the page!");
           })
           .finally(() => {
             setPageLoad(false);
