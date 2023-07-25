@@ -15,7 +15,6 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import "../styles/style.scss";
 import "@rainbow-me/rainbowkit/styles.css";
-import React, { useEffect } from "react";
 
 const appProvider =
   typeof window !== "undefined" && window?.ethereum
@@ -48,17 +47,6 @@ function StakingApp({ Component, pageProps }) {
     LOTTERYABI,
     Signer
   );
-
-  useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum.on('chainChanged', () => {
-        window.location.reload();
-      })
-      window.ethereum.on('accountsChanged', () => {
-        window.location.reload();
-      })
-    }
-  }, [])
 
   return (
     <motion.section
