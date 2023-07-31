@@ -97,7 +97,7 @@ const Dashboard = () => {
   };
 
   const filteredNFTs = useCallback(async (account: string) => {
-    const items = await alchemyConnect.nft.getNftsForOwner(account);
+    const items = await alchemyConnect.nft.getNftsForOwner(account, { contractAddresses: [filterContract] });
     return items;
   }, []);
 
