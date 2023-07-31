@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/pages/_app.jsx",
-    "src/pages/raffle/[slug].jsx",
+    "src/pages/raffle/[slug].jsx", "src/utils/update-provider.jsx",
   ],
   "exclude": [
     "node_modules"

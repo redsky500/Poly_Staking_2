@@ -5,13 +5,16 @@ import { useAccount } from "wagmi";
 import { errorToast, successToast } from "../services/toast-service";
 import { gasLimit } from "../config";
 import CustomButton from "./CustomButton";
+import { useLatestContract } from "../custom-hooks/update-provider";
 const BigNumber = require("bignumber.js");
 
-const MintCards = ({ userNFT, LOTTERYContract, initialSyncFunction }: any) => {
+const MintCards = ({ userNFT, initialSyncFunction }: any) => {
   const { address: account } = useAccount();
   const [isStake, setIsStake] = useState<any>(null);
   const [reward, setReward] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { readStake, stake, fee, unstake, getDailyReward } =
+    useLatestContract();
 
   useEffect(() => {
     if (!account) {
@@ -23,10 +26,10 @@ const MintCards = ({ userNFT, LOTTERYContract, initialSyncFunction }: any) => {
   }, [setIsStake, account]);
 
   const initialSyncFunc = async () => {
-    const isStake = await LOTTERYContract.readStake(userNFT.tokenId);
+    const isStake = await readStake(userNFT.tokenId);
     setIsStake(isStake);
     if (isStake) {
-      const contractReward = await LOTTERYContract.getDailyReward(userNFT.tokenId);
+      const contractReward = await getDailyReward(userNFT.tokenId);
       const etherValue = new BigNumber(contractReward.toString())
         .dividedBy(new BigNumber("1e18"))
         .toString();
@@ -39,8 +42,8 @@ const MintCards = ({ userNFT, LOTTERYContract, initialSyncFunction }: any) => {
 
   const handleStake = async () => {
     setIsProcessing(true);
-    const contractFee = await LOTTERYContract.fee();
-    LOTTERYContract.stake([userNFT.tokenId], {
+    const contractFee = await fee();
+    stake([userNFT.tokenId], {
       from: account,
       value: contractFee.toString(),
       gasLimit,
@@ -69,7 +72,7 @@ const MintCards = ({ userNFT, LOTTERYContract, initialSyncFunction }: any) => {
 
   const handleUnstake = () => {
     setIsProcessing(true);
-    LOTTERYContract.unstake([userNFT.tokenId], {
+    unstake([userNFT.tokenId], {
       gasLimit,
       nonce: undefined,
     })

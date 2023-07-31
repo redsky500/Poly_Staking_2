@@ -7,15 +7,17 @@ import {
   defaultToast,
 } from "../services/toast-service";
 import CustomButton from "../components/CustomButton";
+import { useLatestContract } from "../custom-hooks/update-provider";
 
 const BigNumber = require("bignumber.js");
 
-const AdminPanel: NextPage = ({ LOTTERYContract }: any) => {
+const AdminPanel: NextPage = () => {
   const [fees, setFees] = useState(0);
   const [prize, setPrize] = useState(0);
   const [isFeeProcess, setIsFeeProcess] = useState(false);
   const [isRewardProcess, setIsRewardProcess] = useState(false);
   const ethInWei = new BigNumber("10").exponentiatedBy(18);
+  const { setFee, setReward } = useLatestContract();
 
   const handleFees = () => {
     if (!fees) {
@@ -26,7 +28,7 @@ const AdminPanel: NextPage = ({ LOTTERYContract }: any) => {
     const feesWei: any = feesValue.times(ethInWei);
     const feesWeiToWei = feesWei.toString();
 
-    LOTTERYContract.setFee(feesWeiToWei, {
+    setFee(feesWeiToWei, {
       gasLimit,
       nonce: undefined,
     })
@@ -56,7 +58,7 @@ const AdminPanel: NextPage = ({ LOTTERYContract }: any) => {
     const prizeValue: any = new BigNumber(`${prize}`);
     const prizeWei: any = prizeValue.times(ethInWei);
     const prizeWeiToWei = prizeWei.toString();
-    LOTTERYContract.setReward(prizeWeiToWei, {
+    setReward(prizeWeiToWei, {
       gasLimit,
       nonce: undefined,
     })

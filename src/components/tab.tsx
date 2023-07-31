@@ -73,7 +73,9 @@ const Tab = ({
               <div className="flex flex-wrap gap-[20px] justify-center">
                 {NFTCards}
               </div>
-              <div className="px-2 py-4 max-w-[250px] w-full m-auto">{moreButton}</div>
+              <div className="px-2 py-4 max-w-[250px] w-full m-auto">
+                {moreButton}
+              </div>
             </>
           )}
         </div>
