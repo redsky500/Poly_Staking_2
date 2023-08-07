@@ -92,7 +92,7 @@ export const useLatestContract = () => {
         async (allStakeNFT, accountInfo) => {
             try {
                 const lotteryContract = getLotteryContract();
-                const unstaked = await lotteryContract.unstake(allStakeNFT, accountInfo)
+                const unstaked = await lotteryContract.claimAll(allStakeNFT, accountInfo)
                 return unstaked;
             } catch (error) {
                 console.log(error)
