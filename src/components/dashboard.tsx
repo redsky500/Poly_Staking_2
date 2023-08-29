@@ -28,12 +28,11 @@ const Dashboard = () => {
   const [isStakeAllProcessing, setIsStakeAllProcessing] = useState(false);
   const [isUnstakeAllProcessing, setIsUnstakeAllProcessing] = useState(false);
   const [isClaimAllProcessing, setIsClaimAllProcessing] = useState(false);
-  const [paginationNFT, setMintCards] = useState([]);
+  const [paginationNFT, setMintCards] = useState<any[]>([]);
   const [reward, setReward] = useState<any>(null);
   const [bgStyle, setBgStyle] = useState("");
   const { chain } = useNetwork();
-  const { readStake, readAmount, fee, stake, unstake, claimAll } =
-    useLatestContract();
+  const { readStake, readAmount, fee, stake, unstake, claimAll } = useLatestContract();
 
   useEffect(() => {
     const networkName = chain?.name;
@@ -45,7 +44,7 @@ const Dashboard = () => {
       return;
     }
 
-    if (networkName !== "Polygon") {
+    if (networkName && networkName !== "Polygon") {
       setIsLoggedIn(false);
       errorToast("Please connect to Polygon net");
       return;
@@ -76,9 +75,9 @@ const Dashboard = () => {
       matchedNFTs.map(async (item: any, index: number) => {
         const image = item?.rawMetadata?.image?.includes("ipfs://")
           ? item?.rawMetadata?.image?.replace(
-              "ipfs://",
-              "https://ipfs.io/ipfs/"
-            )
+            "ipfs://",
+            "https://ipfs.io/ipfs/"
+          )
           : item?.rawMetadata?.image;
         const isStaked = await readStake(item.tokenId);
         convertedAllNFTs.push({
@@ -108,9 +107,10 @@ const Dashboard = () => {
     return paginatedItems;
   };
 
-  const updatePagination = (items: any) => {
+  const updatePagination = (items: any, currentTab: boolean = false) => {
     const paginatedItems = paginate(items, itemsPerPage, currentPage);
-    setMintCards(paginatedItems);
+    const combinedFilteredNFTs = currentTab ? [...paginationNFT, ...paginatedItems] : paginatedItems
+    setMintCards(combinedFilteredNFTs);
   };
 
   const handleNFTPagination = () => {
@@ -118,7 +118,7 @@ const Dashboard = () => {
     const totalPages = Math.ceil(userNFTs.length / itemsPerPage);
     if (currentPage < totalPages) {
       currentPage++;
-      updatePagination(userNFTs);
+      updatePagination(userNFTs, true);
     } else {
       errorToast(`You have total ${userNFTs.length} NFTs`);
     }
@@ -130,7 +130,7 @@ const Dashboard = () => {
     const handledNFTs = userAllNFTs.filter((item: any) => {
       return currentTab == "tab-1" ? !item.isStaked : item.isStaked;
     });
-    updatePagination(handledNFTs);
+    updatePagination(handledNFTs, false);
     setPageLoad(false);
     setIsLoggedIn(true);
     if (currentTab == "tab-2") {
@@ -142,7 +142,7 @@ const Dashboard = () => {
     const allRewardNFTPrize = userNFTs
       .filter((item: any) => item.isStaked)
       .map((item: any) => item.tokenId);
-    if (allRewardNFTPrize) {
+    if (allRewardNFTPrize && allRewardNFTPrize?.length) {
       const currentReward = await readAmount(allRewardNFTPrize);
       const etherValue = new BigNumber(currentReward.toString())
         .dividedBy(new BigNumber("1e18"))
@@ -154,16 +154,14 @@ const Dashboard = () => {
 
   const handleStakeAll = async () => {
     setIsStakeAllProcessing(true);
-    const allStakeNFT = userNFTs
-      .filter((item: any) => !item.isStaked)
-      .map((item: any) => item.tokenId);
-
-    const contractFee = await fee();
-    const amount = allStakeNFT.length * contractFee.toString();
+    const allStakeNFT = userNFTs.filter((item: any) => !item.isStaked).map((item: any) => item.tokenId);
+    const contractFee = (await fee());
+    const amount = allStakeNFT.length * Number(contractFee.toString());
+    const bigNumberValue = BigNumber(amount);
 
     stake(allStakeNFT, {
       from: account,
-      value: amount.toString(),
+      value: bigNumberValue.toString(),
       gasLimit,
       nonce: undefined,
     })
