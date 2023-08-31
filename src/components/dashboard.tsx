@@ -155,14 +155,12 @@ const Dashboard = () => {
   const handleStakeAll = async () => {
     setIsStakeAllProcessing(true);
     const allStakeNFT = userNFTs.filter((item: any) => !item.isStaked).map((item: any) => item.tokenId);
-    const contractFee = (await fee());
-    const amount = allStakeNFT.length * Number(contractFee.toString());
-    const bigNumberValue = BigNumber(amount);
+    const contractFee = await fee();
 
     stake(allStakeNFT, {
       from: account,
-      value: bigNumberValue.toString(),
-      gasLimit,
+      value: contractFee.toString(),
+      gasLimit: 6000000,
       nonce: undefined,
     })
       .then((res: any) => {
@@ -172,7 +170,8 @@ const Dashboard = () => {
             initialSyncFunction();
             setIsStakeAllProcessing(false);
           })
-          .catch(() => {
+          .catch((error: any) => {
+            debugger;
             errorToast("transaction failed!");
             setIsStakeAllProcessing(false);
           });
