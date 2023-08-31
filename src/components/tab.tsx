@@ -16,8 +16,9 @@ const Tab = ({
   handleTabs,
   handleStakeAll,
   handleUnstakeAll,
+  tab
 }: any) => {
-  const [currentTab, setCurrentTab] = useState("tab-1");
+  const [currentTab, setCurrentTab] = useState(tab);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleTab = (CurrentTab: string) => {

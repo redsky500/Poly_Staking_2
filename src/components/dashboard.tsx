@@ -17,22 +17,23 @@ const loader = (
 );
 const itemsPerPage = 50;
 let currentPage = 1;
+let currentTab = "tab-1";
 const filterContract = "0xA7807d70E0574249b0BF945698dbeCB60768d13b";
 
 const Dashboard = () => {
+  const { chain } = useNetwork();
+  const { readStake, readAmount, fee, stake, unstake, claimAll } = useLatestContract();
   const { address: account } = useAccount();
-  const [userNFTs, setUserNFTs] = useState([]);
   const [pageLoad, setPageLoad] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMoreButtonProcessing, setIsMoreButtonProcessing] = useState(false);
   const [isStakeAllProcessing, setIsStakeAllProcessing] = useState(false);
   const [isUnstakeAllProcessing, setIsUnstakeAllProcessing] = useState(false);
   const [isClaimAllProcessing, setIsClaimAllProcessing] = useState(false);
-  const [paginationNFT, setMintCards] = useState<any[]>([]);
   const [reward, setReward] = useState<any>(null);
   const [bgStyle, setBgStyle] = useState("");
-  const { chain } = useNetwork();
-  const { readStake, readAmount, fee, stake, unstake, claimAll } = useLatestContract();
+  const [userNFTs, setUserNFTs] = useState([]);
+  const [paginationNFT, setMintCards] = useState<any[]>([]);
 
   useEffect(() => {
     const networkName = chain?.name;
@@ -87,7 +88,7 @@ const Dashboard = () => {
         });
         if (matchedNFTs.length - 1 == index) {
           setUserNFTs(convertedAllNFTs);
-          handleTabs("tab-1", convertedAllNFTs);
+          handleTabs(currentTab, convertedAllNFTs);
         }
       });
     } else {
@@ -107,9 +108,9 @@ const Dashboard = () => {
     return paginatedItems;
   };
 
-  const updatePagination = (items: any, currentTab: boolean = false) => {
+  const updatePagination = (items: any, isPaginate: boolean = false) => {
     const paginatedItems = paginate(items, itemsPerPage, currentPage);
-    const combinedFilteredNFTs = currentTab ? [...paginationNFT, ...paginatedItems] : paginatedItems
+    const combinedFilteredNFTs = isPaginate ? [...paginationNFT, ...paginatedItems] : paginatedItems
     setMintCards(combinedFilteredNFTs);
   };
 
@@ -125,15 +126,17 @@ const Dashboard = () => {
     setIsMoreButtonProcessing(false);
   };
 
-  const handleTabs = async (currentTab: string, allNFTs: any = []) => {
+  const handleTabs = async (tab: string, allNFTs: any = []) => {
+    currentPage = 1;
+    currentTab = tab;
     const userAllNFTs = allNFTs?.length ? allNFTs : userNFTs;
     const handledNFTs = userAllNFTs.filter((item: any) => {
-      return currentTab == "tab-1" ? !item.isStaked : item.isStaked;
+      return tab == "tab-1" ? !item.isStaked : item.isStaked;
     });
     updatePagination(handledNFTs, false);
     setPageLoad(false);
     setIsLoggedIn(true);
-    if (currentTab == "tab-2") {
+    if (tab == "tab-2") {
       getRewardPrize();
     }
   };
@@ -171,7 +174,6 @@ const Dashboard = () => {
             setIsStakeAllProcessing(false);
           })
           .catch((error: any) => {
-            debugger;
             errorToast("transaction failed!");
             setIsStakeAllProcessing(false);
           });
@@ -183,6 +185,7 @@ const Dashboard = () => {
   };
 
   const handleUnstakeAll = () => {
+    currentTab = "tab-1";
     setIsUnstakeAllProcessing(true);
     const allStakeNFT = userNFTs
       .filter((item: any) => item.isStaked)
@@ -292,6 +295,7 @@ const Dashboard = () => {
                     )
                   }
                   handleTabs={handleTabs}
+                  tab={currentTab}
                   handleStakeAll={
                     <div className="w-[150px] mx-auto mb-[25px]">
                       <CustomButton
